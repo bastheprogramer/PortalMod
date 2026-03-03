@@ -1,6 +1,7 @@
 package net.portalmod.mixins.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GameRenderer;
@@ -94,5 +95,17 @@ public abstract class GameRendererMixin {
 
         if(!PortalRenderer.getInstance().shouldRenderOutline(null))
             info.setReturnValue(false);
+    }
+
+    @Redirect(
+            remap = false,
+            method = "renderItemInHand",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/GameSettings;hideGui:Z"
+            )
+    )
+    private boolean pmDontHideHand(GameSettings instance) {
+        return false;
     }
 }
