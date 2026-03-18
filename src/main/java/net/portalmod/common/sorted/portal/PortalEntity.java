@@ -224,11 +224,11 @@ public class PortalEntity extends Entity implements IEntityAdditionalSpawnData {
         Vector3d dm = entity.getDeltaMovement();
 
         if(entity instanceof Flingable) {
-            if(portal.getDirection().getAxis().isVertical() && targetPortal.getDirection().getAxis().isHorizontal()) {
+//            if(portal.getDirection().getAxis().isVertical() && targetPortal.getDirection().getAxis().isHorizontal()) {
                 ((Flingable)entity).setFlinging(true);
-            } else if(targetPortal.getDirection().getAxis().isVertical()) {
-                ((Flingable)entity).setFlinging(false);
-            }
+//            } else if(targetPortal.getDirection().getAxis().isVertical()) {
+//                ((Flingable)entity).setFlinging(false);
+//            }
             // in other cases leave it alone
         }
 
