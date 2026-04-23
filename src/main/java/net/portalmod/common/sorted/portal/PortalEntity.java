@@ -339,6 +339,18 @@ public class PortalEntity extends Entity implements IEntityAdditionalSpawnData {
 
         delta = portal.teleportVector(new Vec3(delta)).to3d();
         entity.setDeltaMovement(portal.teleportVector(new Vec3(dm)).to3d());
+        if(entity instanceof DamagingProjectileEntity) {
+            DamagingProjectileEntity damagingProjectile = (DamagingProjectileEntity)entity;
+            Vec3 power = new Vec3(
+                    damagingProjectile.xPower,
+                    damagingProjectile.yPower,
+                    damagingProjectile.zPower
+            );
+            Vec3 teleportedPower = portal.teleportVector(power);
+            damagingProjectile.xPower = teleportedPower.x;
+            damagingProjectile.yPower = teleportedPower.y;
+            damagingProjectile.zPower = teleportedPower.z;
+        }
 
         OrthonormalBasis portalBasis = portal.getSourceBasis();
         OrthonormalBasis targetPortalBasis = targetPortal.getDestinationBasis();
