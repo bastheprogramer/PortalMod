@@ -528,7 +528,9 @@ public class PortalEntity extends Entity implements IEntityAdditionalSpawnData {
             entity.setDeltaMovement(entity.getDeltaMovement()
                     .add(new Vec3(this.getDirection()).mul(.2).add(0,0.08,0).to3d()));
             Vector3d posWithOffset = entity.position().add(0,0.08,0); // gravity is 0.08 blocks per tick squared
-            entity.setPos(posWithOffset.x(), posWithOffset.y(), posWithOffset.z());
+            Vector3d vel = entity.getDeltaMovement();
+            Vector3d newPos = posWithOffset.add(vel);
+            entity.setPos(newPos.x, newPos.y, newPos.z); // more the entity by one tick
         }
     }
 
