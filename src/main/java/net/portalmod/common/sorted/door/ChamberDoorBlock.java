@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.*;
@@ -12,6 +13,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -237,6 +239,18 @@ public class ChamberDoorBlock extends MultiBlock {
     public void setOpen(boolean open, BlockState blockState, World world, BlockPos pos) {
         this.setBlockStateValue(OPEN, open, blockState, world, pos);
         this.updateAllNeighbors(world, pos, blockState);
+        if (!world.isClientSide() && !open) {
+            Direction horizontalExt = blockState.getValue(FACING).getCounterClockWise();
+            BlockPos oppositeCorner = pos.above().relative(horizontalExt);
+
+            AxisAlignedBB killBox = new AxisAlignedBB(pos).minmax(new AxisAlignedBB(oppositeCorner));
+            killBox = killBox.deflate(0.1D);
+
+            List<Entity> entities = world.getEntities(null, killBox);
+            for (Entity entity : entities) {
+                entity.hurt(DamageSource.IN_WALL, 100);
+            }
+        }
         playSound(open, blockState, world, pos);
     }
 
